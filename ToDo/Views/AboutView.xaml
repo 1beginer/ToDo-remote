@@ -13,10 +13,10 @@
             <TextBlock
                 FontSize="32"
                 FontWeight="Bold"
-                Text="关于作者" />
+                Text="关于杜炆洋" />
             <TextBlock Margin="15" Text="手机号：15550442097" />
             <TextBlock Margin="15" Text="QQ：2229896003" />
-            <TextBlock Margin="15" Text="家庭住址：北京市朝阳区胡同街1012号" />
+            <TextBlock Margin="15" Text="家庭住址：北京市朝阳区胡同街1011号" />
         </StackPanel>
     </Grid>
 </UserControl>
