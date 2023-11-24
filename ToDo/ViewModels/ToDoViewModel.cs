@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ToDo.Shared.Dtos;
+using ToDo.Services.ServiceImpl;
 
 namespace ToDo.ViewModels
 {
@@ -16,21 +17,31 @@ namespace ToDo.ViewModels
     {
         private ObservableCollection<ToDoDto> toDoDtos;
         private bool isRightDrawerOpen;
+        private readonly IToDoService toDoService;
 
         public DelegateCommand AddCommand { get; set; }
-        public ToDoViewModel()
+        public ToDoViewModel(IToDoService toDoService)
         {
             AddCommand = new DelegateCommand(() => { IsRightDrawerOpen = true; });
-            TestData();
-
+            this.toDoService = toDoService;
+            ToDoDtos = new ObservableCollection<ToDoDto>();
+            CreateToDoList();
         }
 
-        private void TestData()
+        private async void CreateToDoList()
         {
-            ToDoDtos = new ObservableCollection<ToDoDto>();
-            for (int i = 0; i < 20; i++)
+            var todoResult = await toDoService.GetPageListAsync(new Shared.Parameters.QueryParameter()
             {
-                ToDoDtos.Add(new ToDoDto { Title = "待办事项" + i, Content = "内容" + i });
+                PageIndex = 0,
+                PageSize = 100,
+            });
+            if (todoResult.Status)
+            {
+                ToDoDtos.Clear();
+                foreach (var item in todoResult.Result.Items)
+                {
+                    ToDoDtos.Add(item);
+                }
             }
         }
         public ObservableCollection<ToDoDto> ToDoDtos

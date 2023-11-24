@@ -48,13 +48,13 @@ namespace ToDo.Services.ServiceImpl
         public async Task<ApiResponseShared<PagedList<TEntity>>> GetPageListAsync(QueryParameter parameter)
         {
             BaseRequest request = new BaseRequest();
-            request.Method = RestSharp.Method.Get;
-            request.Route = $"api/{serviceName}/GetAll?PageIndex={parameter.PageIndex}" +
-                $"&PageSize={parameter.PageSize}" +
-                $"&Search={parameter.Search}";
+            request.Method = RestSharp.Method.Post;
+            request.Route = $"api/{serviceName}/GetPageList?pageIndex={parameter.PageIndex}" +
+                $"&pageSize={parameter.PageSize}" +
+                $"&search={parameter.Search}";
             return await httpRestClient.ExecuteAsync<PagedList<TEntity>>(request);
-            
         }
+
 
         public async Task<ApiResponseShared<TEntity>> UpdateAsync(TEntity entity)
         {

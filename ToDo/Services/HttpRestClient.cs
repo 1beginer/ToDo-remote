@@ -11,13 +11,13 @@ namespace ToDo.Services
 {
     public class HttpRestClient
     {
-        private readonly string apiUrl;
+        private readonly string webUrl;
         protected readonly RestClient client;
         protected readonly RestClientOptions options;
-        public HttpRestClient(string apiUrl)
+        public HttpRestClient(string webUrl)
         {
-            this.apiUrl = apiUrl;
-            options = new RestClientOptions(apiUrl) { MaxTimeout = -1 };
+            this.webUrl = webUrl;
+            options = new RestClientOptions(webUrl) { MaxTimeout = -1 };
             client = new RestClient(options);
         }
 
