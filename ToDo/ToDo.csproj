@@ -3,9 +3,11 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
+		<ApplicationIcon>Resources\Ico\ToDo.ico</ApplicationIcon>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Resources\Fonts\iconfont.ttf" />
+		<None Remove="Resources\Ico\ToDo.ico" />
 		<None Remove="Resources\Images\user.jpg" />
 	</ItemGroup>
 	<ItemGroup>
@@ -20,6 +22,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Resource Include="Resources\Fonts\iconfont.ttf" />
+		<Resource Include="Resources\Ico\ToDo.ico" />
 		<Resource Include="Resources\Images\user.jpg" />
 	</ItemGroup>
 </Project>

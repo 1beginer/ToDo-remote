@@ -18,7 +18,7 @@ namespace ToDo.Services
 
         Task<ApiResponseShared> DeletedAsync(int id);
 
-        Task<ApiResponseShared> GetFirstOfDefaultAsync(int id);
+        Task<ApiResponseShared<TEntity>> GetFirstOfDefaultAsync(int id);
 
         Task<ApiResponseShared<PagedList<TEntity>>> GetPageListAsync(QueryParameter parameter);
     }

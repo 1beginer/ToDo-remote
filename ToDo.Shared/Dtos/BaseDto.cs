@@ -14,7 +14,7 @@ namespace ToDo.Shared.Dtos
     public class BaseDto : INotifyPropertyChanged
     {
         public int Id { get; set; }
-        public DateTime CreateTime { get; set; }
+        //public DateTime CreateTime { get; set; }
         /// <summary>
         /// 属性更改事件处理程序
         /// </summary>

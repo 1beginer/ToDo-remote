@@ -27,11 +27,12 @@ namespace ToDo
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
             containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
             containerRegistry.GetContainer().RegisterInstance(@"http://localhost:5264", serviceKey: "webUrl");
 
             containerRegistry.RegisterScoped<IToDoService, ToDoService>();
+            containerRegistry.RegisterScoped<IMemoService, MemoService>();
+
             containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>("IndexView");
             containerRegistry.RegisterForNavigation<MemoView, MemoViewModel>("MemoView");
             containerRegistry.RegisterForNavigation<SettingView, SettingViewModel>("SettingsView");

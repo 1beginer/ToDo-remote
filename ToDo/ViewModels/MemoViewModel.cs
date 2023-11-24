@@ -8,29 +8,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ToDo.Shared.Dtos;
+using ToDo.Services;
+using ToDo.Shared.Parameters;
+using Prism.Ioc;
+using Prism.Regions;
 
 namespace ToDo.ViewModels
 {
-    public class MemoViewModel : BindableBase
+    public class MemoViewModel : NavigationViewMode
     {
         private ObservableCollection<MemoDto> memoDtos;
         private bool isRightDrawerOpen;
+        private readonly IMemoService memoService;
 
         public DelegateCommand AddCommand { get; set; }
-        public MemoViewModel()
+        public MemoViewModel(IMemoService memoService, IContainerProvider provider) : base(provider)
         {
             AddCommand = new DelegateCommand(() => { IsRightDrawerOpen = true; });
-            TestData();
+            this.memoService = memoService;
+            MemoDtos = new ObservableCollection<MemoDto>();
 
         }
 
-        private void TestData()
+        private async void GetDataAsync()
         {
-            MemoDtos = new ObservableCollection<MemoDto>();
-            for (int i = 0; i < 20; i++)
+            UpdateLoading(true);
+
+            var memoResult = await memoService.GetPageListAsync(new QueryParameter()
             {
-                MemoDtos.Add(new MemoDto { Title = "备忘录" + i, Content = "内容" + i });
+                PageIndex = 0,
+                PageSize = 100,
+            });
+            if (memoResult.Status)
+            {
+                MemoDtos.Clear();
+                foreach (var item in memoResult.Result.Items)
+                {
+                    MemoDtos.Add(item);
+                }
             }
+
+            UpdateLoading(false);
+        }
+
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            base.OnNavigatedTo(navigationContext);
+
+            GetDataAsync();
         }
 
         public ObservableCollection<MemoDto> MemoDtos

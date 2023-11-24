@@ -26,7 +26,7 @@ namespace ToDo.Services.ServiceImpl
             request.Method = RestSharp.Method.Post;
             request.Route = $"api/{serviceName}/Add";
             request.Parameter = entity;
-            return await httpRestClient.ExecuteAsync<TEntity>(request);
+            return await httpRestClient.ExecuteAsyncx<TEntity>(request);
         }
 
         public async Task<ApiResponseShared> DeletedAsync(int id)
@@ -34,15 +34,15 @@ namespace ToDo.Services.ServiceImpl
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Delete;
             request.Route = $"api/{serviceName}/Delete?id={id}";
-            return await httpRestClient.ExecuteAsync(request);
+            return await httpRestClient.ExecuteAsyncx(request);
         }
 
-        public async Task<ApiResponseShared> GetFirstOfDefaultAsync(int id)
+        public async Task<ApiResponseShared<TEntity>> GetFirstOfDefaultAsync(int id)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Get;
-            request.Route = $"api/{serviceName}/Get?id={id}";
-            return await httpRestClient.ExecuteAsync(request);
+            request.Route = $"api/{serviceName}/GetById?id={id}";
+            return await httpRestClient.ExecuteAsyncx<TEntity>(request);
         }
 
         public async Task<ApiResponseShared<PagedList<TEntity>>> GetPageListAsync(QueryParameter parameter)
@@ -52,7 +52,7 @@ namespace ToDo.Services.ServiceImpl
             request.Route = $"api/{serviceName}/GetPageList?pageIndex={parameter.PageIndex}" +
                 $"&pageSize={parameter.PageSize}" +
                 $"&search={parameter.Search}";
-            return await httpRestClient.ExecuteAsync<PagedList<TEntity>>(request);
+            return await httpRestClient.ExecuteAsyncx<PagedList<TEntity>>(request);
         }
 
 
@@ -62,7 +62,7 @@ namespace ToDo.Services.ServiceImpl
             request.Method = RestSharp.Method.Post;
             request.Route = $"api/{serviceName}/Update";
             request.Parameter = entity;
-            return await httpRestClient.ExecuteAsync<TEntity>(request);
+            return await httpRestClient.ExecuteAsyncx<TEntity>(request);
         }
     }
 }

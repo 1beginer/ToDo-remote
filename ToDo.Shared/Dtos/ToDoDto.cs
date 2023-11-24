@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +12,13 @@ namespace ToDo.Shared.Dtos
     /// </summary>
     public class ToDoDto : BaseDto
     {
-        private string title;
+     private string title;
+
         private string? content;
+
         private int status;
-        private DateTime updateTime;
+        //[JsonProperty]
+        //private DateTime updateTime;
 
 
         public string Title
@@ -35,10 +39,10 @@ namespace ToDo.Shared.Dtos
             set { status = value; OnPropertyChanged(); }
         }
 
-        public DateTime UpdateTime
-        {
-            get { return updateTime; }
-            set { updateTime = value; OnPropertyChanged(); }
-        }
+        //public DateTime UpdateTime
+        //{
+        //    get { return updateTime; }
+        //    set { updateTime = value; OnPropertyChanged(); }
+        //}
     }
 }

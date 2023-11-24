@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToDo.Views;
 
 namespace ToDo.ViewModels
 {
@@ -28,6 +29,7 @@ namespace ToDo.ViewModels
             CreateSettingBar();
             this.regionManager = regionManager;
             NavigateCommand = new DelegateCommand<SideBar>(Navigate);
+            regionManager.RegisterViewWithRegion(PrismManager.SettingsViewRegionName, typeof(SystemSettingView));
         }
 
         private void Navigate(SideBar bar)

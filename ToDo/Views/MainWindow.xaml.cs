@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using Prism.Events;
+using System;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using ToDo.Extensions;
 
 namespace ToDo.Views
 {
@@ -8,13 +12,23 @@ namespace ToDo.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(IEventAggregator aggregator)
         {
             InitializeComponent();
-            MinBtn.Click += (s, e) =>
+
+            //注册等待窗口
+            aggregator.Resgiter(arg =>
             {
-                this.WindowState = WindowState.Minimized;
-            };
+                this.DialogHost.IsOpen = arg.IsOpen;
+
+                if (DialogHost.IsOpen)
+                    DialogHost.DialogContent = new ProgressView();
+            });
+
+            MinBtn.Click += (s, e) =>
+                {
+                    this.WindowState = WindowState.Minimized;
+                };
             WinBtn.Click += (s, e) =>
             {
                 if (this.WindowState == WindowState.Maximized)

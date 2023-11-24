@@ -110,7 +110,7 @@ namespace ToDo.Api.Service.ServiceImpl
             {
                 var repository = unitOfWork.GetRepository<ToDoE>();
                 var todos = await repository.GetPagedListAsync(predicate:
-                    t => string.IsNullOrWhiteSpace(parameter.Search) ? true : t.Title.Equals(parameter.Search),
+                    t => string.IsNullOrWhiteSpace(parameter.Search) ? true : t.Title.Contains(parameter.Search),
                     pageIndex: parameter.PageIndex,
                     pageSize: parameter.PageSize,
                     orderBy: source => source.OrderByDescending(t => t.CreateTime));
