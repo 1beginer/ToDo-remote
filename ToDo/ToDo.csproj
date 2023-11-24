@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="Resources\Fonts\iconfont.ttf" />
+		<None Remove="Resources\Images\user.jpg" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci435" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+		<PackageReference Include="RestSharp" Version="110.2.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ToDo.Shared\ToDo.Shared.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Fonts\iconfont.ttf" />
+		<Resource Include="Resources\Images\user.jpg" />
+	</ItemGroup>
+</Project>
