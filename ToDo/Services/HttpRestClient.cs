@@ -27,23 +27,19 @@ namespace ToDo.Services
             request.AddHeader("Content-Type", baseRequest.ContentType);
 
             if (baseRequest.Parameter != null)
-                request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
-
+                request.AddBody(JsonConvert.SerializeObject(baseRequest.Parameter));
             var response = await client.ExecuteAsync(request);
 
             return JsonConvert.DeserializeObject<ApiResponseShared>(response.Content);
         }
 
-
         public async Task<ApiResponseShared<T>> ExecuteAsyncx<T>(BaseRequest baseRequest)
         {
             var request = new RestRequest(baseRequest.Route, baseRequest.Method);
             request.AddHeader("Content-Type", baseRequest.ContentType);
-
+            //在RestSharp中Add
             if (baseRequest.Parameter != null)
-                request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
-
-
+                request.AddBody(JsonConvert.SerializeObject(baseRequest.Parameter));
             var response = await client.ExecuteAsync(request);
 
             return JsonConvert.DeserializeObject<ApiResponseShared<T>>(response.Content);
