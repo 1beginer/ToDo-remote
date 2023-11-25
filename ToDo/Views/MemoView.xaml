@@ -82,7 +82,20 @@
                                         <Border
                                             Grid.RowSpan="2"
                                             Background="#77ac98"
-                                            CornerRadius="3" />
+                                            CornerRadius="3">
+                                            <!--<Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="0">
+                                                            <Setter Property="Background" Value="#77ac98" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="1">
+                                                            <Setter Property="Background" Value=" #00EE00" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>-->
+                                        </Border>
                                         <TextBlock Margin="10" Text="{Binding Title}" />
                                         <md:PopupBox HorizontalAlignment="Right" Panel.ZIndex="1">
                                             <Button Content="删除" />

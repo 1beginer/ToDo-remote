@@ -27,7 +27,7 @@ namespace ToDo.Api.Service.ServiceImpl
                 var repository = unitOfWork.GetRepository<ToDoE>();
                 await repository.InsertAsync(todo);
                 if (await unitOfWork.SaveChangesAsync() > 0)
-                    return new ApiResponse(true, model);
+                    return new ApiResponse(true, todo);
                 return new ApiResponse("添加数据失败");
             }
             catch (Exception ex)

@@ -12,12 +12,12 @@ namespace ToDo.Shared.Dtos
     /// </summary>
     public class ToDoDto : BaseDto
     {
-     private string title;
+        private string title;
 
         private string? content;
 
         private int status;
-        //[JsonProperty]
+
         //private DateTime updateTime;
 
 

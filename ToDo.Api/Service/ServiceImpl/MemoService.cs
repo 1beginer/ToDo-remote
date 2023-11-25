@@ -28,7 +28,7 @@ namespace ToDo.Api.Service.ServiceImpl
                 var repository = unitOfWork.GetRepository<Memo>();
                 await repository.InsertAsync(dbmemo);
                 if (await unitOfWork.SaveChangesAsync() > 0)
-                    return new ApiResponse(true, model);
+                    return new ApiResponse(true, dbmemo);
                 return new ApiResponse("添加数据失败");
             }
             catch (Exception ex)

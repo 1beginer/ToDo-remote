@@ -30,15 +30,18 @@ namespace ToDo.ViewModels
 
         public DelegateCommand<string> ExecuteCommand { get; private set; }
         public DelegateCommand<ToDoDto> SelectedCommand { get; private set; }
+        public DelegateCommand<ToDoDto> DeleteCommand { get; private set; }
 
         public ToDoViewModel(IToDoService toDoService, IContainerProvider provider) : base(provider)
         {
             ExecuteCommand = new DelegateCommand<string>(Execute);
             SelectedCommand = new DelegateCommand<ToDoDto>(Select);
+            DeleteCommand = new DelegateCommand<ToDoDto>(Delete);
             this.toDoService = toDoService;
             ToDoDtos = new ObservableCollection<ToDoDto>();
 
         }
+
         /// <summary>
         /// 普通命令整合
         /// </summary>
@@ -60,7 +63,6 @@ namespace ToDo.ViewModels
 
             }
         }
-
 
         /// <summary>
         /// 获取数据
@@ -101,7 +103,7 @@ namespace ToDo.ViewModels
         /// </summary>
         private async void Save()
         {
-            if (string.IsNullOrWhiteSpace(CurrentToDo.Title)|| string.IsNullOrWhiteSpace(CurrentToDo.Content))
+            if (string.IsNullOrWhiteSpace(CurrentToDo.Title) || string.IsNullOrWhiteSpace(CurrentToDo.Content))
                 return;
             UpdateLoading(true);
             try
@@ -142,6 +144,32 @@ namespace ToDo.ViewModels
             }
 
         }
+
+        /// <summary>
+        /// 删除命令
+        /// </summary>
+        /// <param name="dto"></param>
+        private async void Delete(ToDoDto dto)
+        {
+            try
+            {
+                UpdateLoading(true);
+                var deleteResult = await toDoService.DeletedAsync(dto.Id);
+                if (deleteResult.Status)
+                {
+                    var Dtodo = ToDoDtos.FirstOrDefault(t => t.Id == dto.Id);
+                    ToDoDtos.Remove(Dtodo);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                UpdateLoading(false);
+            }
+        }
+
         /// <summary>
         /// 查找单个数据
         /// </summary>
