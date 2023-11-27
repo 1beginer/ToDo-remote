@@ -26,21 +26,29 @@ namespace ToDo.ViewModels
 
         private ToDoDto currentToDo;
         private string search;
-        private int? selectedIndex;
+        private int? selectedIndex = 0;
 
         public DelegateCommand<string> ExecuteCommand { get; private set; }
         public DelegateCommand<ToDoDto> SelectedCommand { get; private set; }
         public DelegateCommand<ToDoDto> DeleteCommand { get; private set; }
+        //public DelegateCommand ComboBoxCommand { get; private set; }
 
         public ToDoViewModel(IToDoService toDoService, IContainerProvider provider) : base(provider)
         {
             ExecuteCommand = new DelegateCommand<string>(Execute);
             SelectedCommand = new DelegateCommand<ToDoDto>(Select);
             DeleteCommand = new DelegateCommand<ToDoDto>(Delete);
+            //ComboBoxCommand = new DelegateCommand(Combo);
             this.toDoService = toDoService;
             ToDoDtos = new ObservableCollection<ToDoDto>();
 
         }
+
+        /*下拉列表框触发事件
+         * private void Combo()
+        {
+
+        }*/
 
         /// <summary>
         /// 普通命令整合
@@ -60,7 +68,6 @@ namespace ToDo.ViewModels
                 case "save":
                     Save();
                     break;
-
             }
         }
 
@@ -71,11 +78,12 @@ namespace ToDo.ViewModels
         {
             UpdateLoading(true);
             int? Status = SelectedIndex == 0 ? null : SelectedIndex == 2 ? 1 : 0;
-            var todoResult = await toDoService.GetPageListAsync(new QueryParameter()
+            var todoResult = await toDoService.GetAllFilterAsync(new ToDoParameter()
             {
                 PageIndex = 0,
                 PageSize = 100,
                 Search = Search,
+                Status = Status,
             });
             if (todoResult.Status)
             {
@@ -229,7 +237,7 @@ namespace ToDo.ViewModels
             set { search = value; RaisePropertyChanged(); }
         }
         /// <summary>
-        /// 索引状态
+        /// 下拉列表框选中状态值
         /// </summary>
         public int? SelectedIndex
         {

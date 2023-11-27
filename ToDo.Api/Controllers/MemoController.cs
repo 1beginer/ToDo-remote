@@ -27,10 +27,10 @@ namespace ToDo.Api.Controllers
         public async Task<ApiResponse> GetPageListAsync([FromQuery] QueryParameter parameter) => await service.GetPageListAsync(parameter);
 
         [HttpPost]
-        public async Task<ApiResponse> Update([FromQuery] MemoDto model) => await service.UpdateAsync(model);
+        public async Task<ApiResponse> Update([FromBody] MemoDto model) => await service.UpdateAsync(model);
 
         [HttpPost]
-        public async Task<ApiResponse> Add([FromQuery] MemoDto model) => await service.AddAsync(model);
+        public async Task<ApiResponse> Add([FromBody] MemoDto model) => await service.AddAsync(model);
 
         [HttpDelete]
         public async Task<ApiResponse> Delete(int id) => await service.DeleteAsync(id);

@@ -109,7 +109,7 @@ namespace ToDo.Api.Service.ServiceImpl
             {
                 var repository = unitOfWork.GetRepository<Memo>();
                 var memos = await repository.GetPagedListAsync(predicate:
-                    m => string.IsNullOrWhiteSpace(parameter.Search) ? true : m.Title.Equals(parameter.Search),
+                    m => string.IsNullOrWhiteSpace(parameter.Search) ? true : m.Title.Contains(parameter.Search),
                     pageIndex: parameter.PageIndex,
                     pageSize: parameter.PageSize,
                     orderBy: source => source.OrderByDescending(m => m.CreateTime));

@@ -25,6 +25,8 @@ namespace ToDo.Api.Controllers
 
         [HttpPost]
         public async Task<ApiResponse> GetPageListAsync([FromQuery] QueryParameter parameter) => await service.GetPageListAsync(parameter);
+        [HttpPost]
+        public async Task<ApiResponse> GetAllFilterAsync([FromQuery] ToDoParameter parameter) => await service.GetAllFilterAsync(parameter);
 
         [HttpPost]
         public async Task<ApiResponse> Update([FromBody] ToDoDto model) => await service.UpdateAsync(model);

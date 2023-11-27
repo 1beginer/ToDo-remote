@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Reflection.Metadata;
 using ToDo.Api.Context.Models;
 using ToDo.Shared.Dtos;
 using ToDo.Shared.Parameters;
@@ -114,6 +115,25 @@ namespace ToDo.Api.Service.ServiceImpl
                     pageIndex: parameter.PageIndex,
                     pageSize: parameter.PageSize,
                     orderBy: source => source.OrderByDescending(t => t.CreateTime));
+                return new ApiResponse(true, todos);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse(ex.Message);
+            }
+        }
+
+        public async Task<ApiResponse> GetAllFilterAsync(ToDoParameter parameter)
+        {
+            try
+            {
+                var repository = unitOfWork.GetRepository<ToDoE>();
+                var todos = await repository.GetPagedListAsync(predicate:
+                t => (string.IsNullOrWhiteSpace(parameter.Search) ? true : t.Title.Contains(parameter.Search))
+                   && (parameter.Status == null ? true : t.Status.Equals(parameter.Status)),
+                   pageIndex: parameter.PageIndex,
+                   pageSize: parameter.PageSize,
+                   orderBy: source => source.OrderByDescending(t => t.CreateTime));
                 return new ApiResponse(true, todos);
             }
             catch (Exception ex)

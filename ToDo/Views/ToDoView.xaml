@@ -88,6 +88,11 @@
                             <ComboBoxItem Content="全部" />
                             <ComboBoxItem Content="待办" />
                             <ComboBoxItem Content="已完成" />
+                            <!--<i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.ComboBoxCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>-->
                         </ComboBox>
                     </StackPanel>
                     <Button
