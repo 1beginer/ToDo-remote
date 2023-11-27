@@ -84,7 +84,7 @@
                             Margin="10,0"
                             VerticalAlignment="Center"
                             Text="筛选：" />
-                        <ComboBox SelectedIndex="0">
+                        <ComboBox SelectedIndex="{Binding SelectedIndex}">
                             <ComboBoxItem Content="全部" />
                             <ComboBoxItem Content="待办" />
                             <ComboBoxItem Content="已完成" />

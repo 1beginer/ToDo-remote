@@ -26,7 +26,7 @@ namespace ToDo.ViewModels
 
         private ToDoDto currentToDo;
         private string search;
-
+        private int? selectedIndex;
 
         public DelegateCommand<string> ExecuteCommand { get; private set; }
         public DelegateCommand<ToDoDto> SelectedCommand { get; private set; }
@@ -70,7 +70,7 @@ namespace ToDo.ViewModels
         private async void GetDataAsync()
         {
             UpdateLoading(true);
-
+            int? Status = SelectedIndex == 0 ? null : SelectedIndex == 2 ? 1 : 0;
             var todoResult = await toDoService.GetPageListAsync(new QueryParameter()
             {
                 PageIndex = 0,
@@ -227,6 +227,14 @@ namespace ToDo.ViewModels
         {
             get { return search; }
             set { search = value; RaisePropertyChanged(); }
+        }
+        /// <summary>
+        /// 索引状态
+        /// </summary>
+        public int? SelectedIndex
+        {
+            get { return selectedIndex; }
+            set { selectedIndex = value; RaisePropertyChanged(); }
         }
     }
 
