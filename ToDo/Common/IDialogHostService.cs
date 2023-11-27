@@ -9,6 +9,6 @@ namespace ToDo.Common
 {
     public interface IDialogHostService : IDialogService
     {
-        Task<IDialogResult> ShowDialog(string name, IDialogParameters parameters, string dialogHostName = "root");
+        Task<IDialogResult> ShowDialog(string name, IDialogParameters parameters, string dialogHostName = "Root");
     }
 }

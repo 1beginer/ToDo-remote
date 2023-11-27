@@ -11,6 +11,7 @@ using ToDo.Shared.Dtos;
 using Prism.Commands;
 using ToDo.Views.DialogViews;
 using Prism.Services.Dialogs;
+using ToDo.Common;
 
 namespace ToDo.ViewModels
 {
@@ -21,14 +22,14 @@ namespace ToDo.ViewModels
         private ObservableCollection<TaskBar> taskBarList;
         private ObservableCollection<ToDoDto> toDoDtos;
         private ObservableCollection<MemoDto> memoDtos;
-        private readonly IDialogService dialogService;
+        private readonly IDialogHostService service;
 
         public DelegateCommand<string> ExecuteCommand { get; private set; }
 
         /// <summary>
         /// 构造方法
         /// </summary>
-        public IndexViewModel(IDialogService dialogService)
+        public IndexViewModel(IDialogHostService service)
         {
             InitTaskBar();
             ToDoDtos = new ObservableCollection<ToDoDto>();
@@ -37,7 +38,7 @@ namespace ToDo.ViewModels
             WelcomeTitle = "你好，" + UserName + "! " + NowTime;
 
             ExecuteCommand = new DelegateCommand<string>(Execute);
-            this.dialogService = dialogService;
+            this.service = service;
         }
 
 
@@ -56,12 +57,12 @@ namespace ToDo.ViewModels
 
         private void AddToDo()
         {
-            dialogService.ShowDialog("AddToDoView");
+            service.ShowDialog("AddToDoView", null);
         }
 
         private void AddMemo()
         {
-            dialogService.ShowDialog("AddMemoView");
+            service.ShowDialog("AddMemoView", null);
         }
 
         /// <summary>

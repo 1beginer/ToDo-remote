@@ -44,6 +44,7 @@ namespace ToDo
 
             containerRegistry.RegisterScoped<IToDoService, ToDoService>();
             containerRegistry.RegisterScoped<IMemoService, MemoService>();
+            containerRegistry.RegisterScoped<IDialogHostService, DialogHostService>();
 
             containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>("IndexView");
             containerRegistry.RegisterForNavigation<MemoView, MemoViewModel>("MemoView");
@@ -53,8 +54,10 @@ namespace ToDo
             containerRegistry.RegisterForNavigation<SystemSettingView, SystemSettingViewModel>("SystemSettingView");
             containerRegistry.RegisterForNavigation<AboutView, AboutViewModel>("AboutView");
 
-            containerRegistry.RegisterDialog<AddMemoView, AddMemoViewModel>("AddMemoView");
-            containerRegistry.RegisterDialog<AddToDoView, AddToDoViewModel>("AddToDoView");
+            containerRegistry.RegisterForNavigation<AddMemoView, AddMemoViewModel>("AddMemoView");
+            containerRegistry.RegisterForNavigation<AddToDoView, AddToDoViewModel>("AddToDoView");
+
+
         }
     }
 }

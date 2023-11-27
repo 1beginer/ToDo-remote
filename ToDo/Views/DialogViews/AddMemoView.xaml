@@ -45,9 +45,13 @@
             Orientation="Horizontal">
             <Button
                 Margin="5"
+                Command="{Binding CancelCommand}"
                 Content="取消"
                 Style="{StaticResource MaterialDesignOutlinedButton}" />
-            <Button Margin="5" Content="确定" />
+            <Button
+                Margin="5"
+                Command="{Binding SaveCommand}"
+                Content="确定" />
         </StackPanel>
     </Grid>
 </UserControl>
