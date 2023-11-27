@@ -50,10 +50,11 @@ namespace ToDo.ViewModels
 
         }*/
 
+        #region 方法
         /// <summary>
         /// 普通命令整合
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj"></param>方法
         private async void Execute(string obj)
         {
             switch (obj)
@@ -72,7 +73,7 @@ namespace ToDo.ViewModels
         }
 
         /// <summary>
-        /// 获取数据
+        /// 获取数据方法
         /// </summary>
         private async void GetDataAsync()
         {
@@ -97,7 +98,7 @@ namespace ToDo.ViewModels
             UpdateLoading(false);
         }
         /// <summary>
-        /// 被导航时
+        /// 被导航时方法
         /// </summary>
         /// <param name="navigationContext"></param>
         public override void OnNavigatedTo(NavigationContext navigationContext)
@@ -107,7 +108,7 @@ namespace ToDo.ViewModels
             GetDataAsync();
         }
         /// <summary>
-        /// 保存数据
+        /// 保存数据方法
         /// </summary>
         private async void Save()
         {
@@ -154,7 +155,7 @@ namespace ToDo.ViewModels
         }
 
         /// <summary>
-        /// 删除命令
+        /// 删除命令方法
         /// </summary>
         /// <param name="dto"></param>
         private async void Delete(ToDoDto dto)
@@ -179,7 +180,7 @@ namespace ToDo.ViewModels
         }
 
         /// <summary>
-        /// 查找单个数据
+        /// 查找单一数据方法
         /// </summary>
         /// <param name="dto"></param>
         private async void Select(ToDoDto dto)
@@ -203,7 +204,9 @@ namespace ToDo.ViewModels
                 UpdateLoading(false);
             }
         }
+        #endregion
 
+        #region 属性
         /// <summary>
         /// 数据展示集合
         /// </summary>
@@ -213,7 +216,7 @@ namespace ToDo.ViewModels
             set { toDoDtos = value; }
         }
         /// <summary>
-        /// 右边栏控制
+        /// 右边栏控制属性
         /// </summary>
         public bool IsRightDrawerOpen
         {
@@ -244,6 +247,8 @@ namespace ToDo.ViewModels
             get { return selectedIndex; }
             set { selectedIndex = value; RaisePropertyChanged(); }
         }
+        #endregion
+
     }
 
 }

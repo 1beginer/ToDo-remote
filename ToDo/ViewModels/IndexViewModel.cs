@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ToDo.Shared.Dtos;
+using Prism.Commands;
+using ToDo.Views.DialogViews;
+using Prism.Services.Dialogs;
 
 namespace ToDo.ViewModels
 {
@@ -18,21 +21,51 @@ namespace ToDo.ViewModels
         private ObservableCollection<TaskBar> taskBarList;
         private ObservableCollection<ToDoDto> toDoDtos;
         private ObservableCollection<MemoDto> memoDtos;
+        private readonly IDialogService dialogService;
+
+        public DelegateCommand<string> ExecuteCommand { get; private set; }
 
         /// <summary>
         /// 构造方法
         /// </summary>
-        public IndexViewModel()
+        public IndexViewModel(IDialogService dialogService)
         {
+            InitTaskBar();
+            ToDoDtos = new ObservableCollection<ToDoDto>();
+            MemoDtos = new ObservableCollection<MemoDto>();
             string NowTime = DateTime.Now.ToString("yyy年MM月dd日dddd");
             WelcomeTitle = "你好，" + UserName + "! " + NowTime;
-            InitTaskBar();
-            TestData();
+
+            ExecuteCommand = new DelegateCommand<string>(Execute);
+            this.dialogService = dialogService;
         }
 
 
+        private void Execute(string obj)
+        {
+            switch (obj)
+            {
+                case "AddToDo":
+                    AddToDo();
+                    break;
+                case "AddMemo":
+                    AddMemo();
+                    break;
+            }
+        }
+
+        private void AddToDo()
+        {
+            dialogService.ShowDialog("AddToDoView");
+        }
+
+        private void AddMemo()
+        {
+            dialogService.ShowDialog("AddMemoView");
+        }
+
         /// <summary>
-        /// 初始化任务栏 
+        /// 初始化任务栏方法 
         /// </summary>
         public void InitTaskBar()
         {
@@ -44,17 +77,8 @@ namespace ToDo.ViewModels
                 new TaskBar { Icon = "PlaylistStar", Title = "备忘录", Content = "13", Color = "#FFFFA000", Target = "" }
             };
         }
-        private void TestData()
-        {
-            ToDoDtos = new ObservableCollection<ToDoDto>();
-            MemoDtos = new ObservableCollection<MemoDto>();
 
-            for (int i = 0; i < 10; i++)
-            {
-                ToDoDtos.Add(new ToDoDto { Title = "待办事项" + i, Content = "内容" + i });
-                MemoDtos.Add(new MemoDto { Title = "备忘录" + i, Content = "内容" + i });
-            }
-        }
+        #region 属性
         /// <summary>
         /// 标题
         /// </summary>
@@ -95,5 +119,8 @@ namespace ToDo.ViewModels
             get { return memoDtos; }
             set { memoDtos = value; RaisePropertyChanged(); }
         }
+        #endregion
+
+
     }
 }

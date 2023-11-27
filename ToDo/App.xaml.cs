@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using ToDo.Services;
 using ToDo.Services.ServiceImpl;
+using ToDo.Views.DialogViews;
+using ToDo.ViewModels.DialogViewModels;
 
 namespace ToDo
 {
@@ -23,6 +25,16 @@ namespace ToDo
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
+        }
+        /// <summary>
+        /// Prism 框架的初始化方法
+        /// </summary>
+        protected override void OnInitialized()
+        {
+            var service = App.Current.MainWindow.DataContext as IConfigurationService;
+            if (service != null)
+                service.Configuration();
+            base.OnInitialized();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -40,6 +52,9 @@ namespace ToDo
             containerRegistry.RegisterForNavigation<SkinView, SkinViewModel>("SkinView");
             containerRegistry.RegisterForNavigation<SystemSettingView, SystemSettingViewModel>("SystemSettingView");
             containerRegistry.RegisterForNavigation<AboutView, AboutViewModel>("AboutView");
+
+            containerRegistry.RegisterDialog<AddMemoView, AddMemoViewModel>("AddMemoView");
+            containerRegistry.RegisterDialog<AddToDoView, AddToDoViewModel>("AddToDoView");
         }
     }
 }

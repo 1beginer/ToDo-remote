@@ -6,10 +6,11 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using ToDo.Common;
 
 namespace ToDo.ViewModels
 {
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : BindableBase, IConfigurationService
     {
         private ObservableCollection<SideBar> sideBars;
         public ObservableCollection<SideBar> SideBars
@@ -29,7 +30,6 @@ namespace ToDo.ViewModels
         {
             SideBars = new ObservableCollection<SideBar>();
             journal = new RegionNavigationJournal();
-            CreateSideBars();
             this.regionManager = regionManager;
             NavigateCommand = new DelegateCommand<SideBar>(Navigate);
             GoBackCommand = new DelegateCommand(() =>
@@ -42,7 +42,7 @@ namespace ToDo.ViewModels
                 if (journal != null & journal.CanGoForward)
                     journal.GoForward();
             });
-            //regionManager.RegisterViewWithRegion(PrismManager.MainViewRegionName, typeof(IndexView));
+            regionManager.RegisterViewWithRegion(PrismManager.MainViewRegionName, typeof(IndexView));
         }
 
         private void Navigate(SideBar obj)
@@ -61,6 +61,15 @@ namespace ToDo.ViewModels
             SideBars.Add(new SideBar() { Icon = "NotebookOutline", Title = "待办事项", NameSpace = "ToDoView" });
             SideBars.Add(new SideBar() { Icon = "NotebookPlus", Title = "备忘录", NameSpace = "MemoView" });
             SideBars.Add(new SideBar() { Icon = "Cog", Title = "设置", NameSpace = "SettingsView" });
+        }
+
+        /// <summary>
+        /// 配置首页初始化参数
+        /// </summary>
+        public void Configuration()
+        {
+            CreateSideBars();
+            regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate("IndexView");
         }
     }
 }
