@@ -19,18 +19,21 @@ namespace ToDo.ViewModels
             set { sideBars = value; RaisePropertyChanged(); }
         }
         private readonly IRegionManager regionManager;
+        private readonly IDialogHostService service;
         private IRegionNavigationJournal journal;
 
         public DelegateCommand<SideBar> NavigateCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand GoForwardCommand { get; private set; }
+        public DelegateCommand CloseCommand { get; private set; }
 
 
-        public MainWindowViewModel(IRegionManager regionManager)
+        public MainWindowViewModel(IRegionManager regionManager, IDialogHostService service)
         {
             SideBars = new ObservableCollection<SideBar>();
             journal = new RegionNavigationJournal();
             this.regionManager = regionManager;
+            this.service = service;
             NavigateCommand = new DelegateCommand<SideBar>(Navigate);
             GoBackCommand = new DelegateCommand(() =>
             {
@@ -43,6 +46,12 @@ namespace ToDo.ViewModels
                     journal.GoForward();
             });
             regionManager.RegisterViewWithRegion(PrismManager.MainViewRegionName, typeof(IndexView));
+            CloseCommand = new DelegateCommand(Close);
+        }
+
+        private void Close()
+        {
+            service.ShowDialog("MsgView", null);
         }
 
         private void Navigate(SideBar obj)

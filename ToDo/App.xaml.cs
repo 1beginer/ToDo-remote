@@ -56,6 +56,7 @@ namespace ToDo
 
             containerRegistry.RegisterForNavigation<AddMemoView, AddMemoViewModel>("AddMemoView");
             containerRegistry.RegisterForNavigation<AddToDoView, AddToDoViewModel>("AddToDoView");
+            containerRegistry.RegisterForNavigation<MsgView, MsgViewModel>("MsgView");
 
 
         }

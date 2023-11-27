@@ -41,10 +41,10 @@ namespace ToDo.Views
                 }
             };
 
-            CloseBtn.Click += (s, e) =>
-            {
-                this.Close();
-            };
+            //CloseBtn.Click += (s, e) =>
+            //{
+            //    this.Close();
+            //};
             ColorZone.MouseMove += (s, e) =>
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
