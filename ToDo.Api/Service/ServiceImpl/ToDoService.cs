@@ -158,11 +158,19 @@ namespace ToDo.Api.Service.ServiceImpl
                     orderBy: source => source.OrderByDescending(t => t.CreateTime));
 
                 SummeryDto summery = new SummeryDto();
-                summery.ToDoList = new ObservableCollection<ToDoDto>(mapper.Map<List<ToDoDto>>(todos.Where(t => t.Status == 0)));
+                summery.Sum = todos.Count();//汇总待办数量
+                summery.CompletedCount = todos.Where(t => t.Status == 1).Count();//统计完成数量
+                summery.CompletedRatio = (summery.CompletedCount / (double)summery.Sum).ToString("0%");//计算完成比例
+                summery.MemoCount = memos.Count();//统计备忘录数量
+
+                summery.ToDoList = new ObservableCollection<ToDoDto>(mapper.Map<List<ToDoDto>>(todos.Where(t => t.Status == 0)));//统计待办事件集合
+                summery.MemoList = new ObservableCollection<MemoDto>(mapper.Map<List<MemoDto>>(memos));//统计备忘事件集合
+
+                return new ApiResponse(true, summery);
             }
             catch (Exception ex)
             {
-
+                return new ApiResponse(false, "出现异常");
             }
         }
     }

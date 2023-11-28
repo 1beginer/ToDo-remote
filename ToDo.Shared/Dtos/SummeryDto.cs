@@ -24,7 +24,7 @@ namespace ToDo.Shared.Dtos
         public int Sum
         {
             get { return sum; }
-            set { sum = value; }
+            set { sum = value; OnPropertyChanged(); }
         }
         /// <summary>
         /// 完成待办事项数量
@@ -32,7 +32,7 @@ namespace ToDo.Shared.Dtos
         public int CompletedCount
         {
             get { return completedCount; }
-            set { completedCount = value; }
+            set { completedCount = value; OnPropertyChanged(); }
         }
         /// <summary>
         /// 备忘录属性
@@ -40,7 +40,7 @@ namespace ToDo.Shared.Dtos
         public int MemoCount
         {
             get { return memoCount; }
-            set { memoCount = value; }
+            set { memoCount = value; OnPropertyChanged(); }
         }
         /// <summary>
         /// 待办是事项完成比例
@@ -48,7 +48,7 @@ namespace ToDo.Shared.Dtos
         public string CompletedRatio
         {
             get { return completedRatio; }
-            set { completedRatio = value; }
+            set { completedRatio = value; OnPropertyChanged(); }
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ToDo.Shared.Dtos
         public ObservableCollection<ToDoDto> ToDoList
         {
             get { return todoList; }
-            set { todoList = value; }
+            set { todoList = value; OnPropertyChanged(); }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ToDo.Shared.Dtos
         public ObservableCollection<MemoDto> MemoList
         {
             get { return memoList; }
-            set { memoList = value; }
+            set { memoList = value; OnPropertyChanged(); }
         }
 
     }

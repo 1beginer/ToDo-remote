@@ -37,6 +37,12 @@
                         Margin="10"
                         Background="{Binding Color}"
                         CornerRadius="5">
+                        <Border.InputBindings>
+                            <MouseBinding
+                                Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}"
+                                MouseAction="LeftClick" />
+                        </Border.InputBindings>
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
@@ -130,7 +136,7 @@
                 <ListBox
                     x:Name="todoList"
                     HorizontalContentAlignment="Stretch"
-                    ItemsSource="{Binding ToDoDtos}"
+                    ItemsSource="{Binding Summery.ToDoList}"
                     ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
@@ -190,7 +196,7 @@
                 <ListBox
                     x:Name="memoList"
                     HorizontalContentAlignment="Stretch"
-                    ItemsSource="{Binding MemoDtos}"
+                    ItemsSource="{Binding Summery.MemoList}"
                     ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">

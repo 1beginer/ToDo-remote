@@ -16,6 +16,9 @@ using Prism.Ioc;
 using ToDo.Services.ServiceImpl;
 using ToDo.Services;
 using System.Numerics;
+using Prism.Regions;
+using ToDo.Extensions;
+using System.Threading.Tasks.Dataflow;
 
 namespace ToDo.ViewModels
 {
@@ -25,15 +28,18 @@ namespace ToDo.ViewModels
         private readonly IMemoService memoService;
         private string welcomeTitle;
         private string userName = "杜炆洋";
+        private SummeryDto summery;
         private ObservableCollection<TaskBar> taskBarList;
         private ObservableCollection<ToDoDto> toDoDtos;
         private ObservableCollection<MemoDto> memoDtos;
+        private readonly IRegionManager regionManager;
         private readonly IDialogHostService service;
 
         public DelegateCommand<string> ExecuteCommand { get; private set; }
         public DelegateCommand<ToDoDto> EditToDoCommand { get; private set; }
         public DelegateCommand<MemoDto> EditMemoCommand { get; private set; }
         public DelegateCommand<ToDoDto> ToDoCompltedCommand { get; private set; }
+        public DelegateCommand<TaskBar> NavigateCommand { get; private set; }
 
 
         /// <summary>
@@ -42,15 +48,15 @@ namespace ToDo.ViewModels
         public IndexViewModel(IDialogHostService service, IContainerProvider provider) : base(provider)
         {
             InitTaskBar();
-            ToDoDtos = new ObservableCollection<ToDoDto>();
-            MemoDtos = new ObservableCollection<MemoDto>();
-            string NowTime = DateTime.Now.ToString("yyy年MM月dd日dddd");
-            WelcomeTitle = "你好，" + UserName + "! " + NowTime;
+            //string NowTime = DateTime.Now.ToString("yyy年MM月dd日dddd");
+            WelcomeTitle = "你好，" + UserName + DateTime.Now.GetDateTimeFormats('D')[1].ToString();
 
             ExecuteCommand = new DelegateCommand<string>(Execute);
             EditToDoCommand = new DelegateCommand<ToDoDto>(AddToDo);
             EditMemoCommand = new DelegateCommand<MemoDto>(AddMemo);
             ToDoCompltedCommand = new DelegateCommand<ToDoDto>(Complted);
+            NavigateCommand = new DelegateCommand<TaskBar>(Navigate);
+            this.regionManager = provider.Resolve<IRegionManager>();
             this.service = service;
 
             toDoService = provider.Resolve<IToDoService>();
@@ -58,15 +64,30 @@ namespace ToDo.ViewModels
 
         }
 
+        private void Navigate(TaskBar bar)
+        {
+            if (string.IsNullOrWhiteSpace(bar.Target))
+                return;
+            NavigationParameters param = new NavigationParameters();
+            if (bar.Title == "已完成")
+            {
+                param.Add("Value", 2);
+            }
+            regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(bar.Target, param);
+        }
+
         private async void Complted(ToDoDto dto)
         {
             var updateResult = await toDoService.UpdateAsync(dto);
             if (updateResult.Status)
             {
-                var todo = ToDoDtos.FirstOrDefault(t => t.Id.Equals(dto.Id));
+                var todo = Summery.ToDoList.FirstOrDefault(t => t.Id.Equals(dto.Id));
                 if (todo != null)
                 {
-                    ToDoDtos.Remove(todo);
+                    Summery.CompletedCount += 1;
+                    Summery.ToDoList.Remove(todo);
+                    Summery.CompletedRatio = (Summery.CompletedCount / (double)Summery.Sum).ToString("0%");
+                    this.Refresh();
                 }
             }
         }
@@ -99,12 +120,11 @@ namespace ToDo.ViewModels
                     var updateResult = await toDoService.UpdateAsync(todo);
                     if (updateResult.Status)
                     {
-                        var todoModel = ToDoDtos.FirstOrDefault(t => t.Id.Equals(todo.Id));
+                        var todoModel = Summery.ToDoList.FirstOrDefault(t => t.Id.Equals(todo.Id));
                         if (todoModel != null)
                         {
                             todoModel.Title = todo.Title;
                             todoModel.Content = todo.Content;
-
                         }
                     }
                 }
@@ -113,7 +133,10 @@ namespace ToDo.ViewModels
                     var addResult = await toDoService.AddAsync(todo);
                     if (addResult.Status)
                     {
-                        ToDoDtos.Add(addResult.Result);
+                        Summery.Sum += 1;
+                        Summery.ToDoList.Add(addResult.Result);
+                        Summery.CompletedRatio = (Summery.CompletedCount / (double)Summery.Sum).ToString("0%");
+                        this.Refresh();
                     }
                 }
 
@@ -136,7 +159,7 @@ namespace ToDo.ViewModels
                     var updateResult = await memoService.UpdateAsync(memo);
                     if (updateResult.Status)
                     {
-                        var memoModel = ToDoDtos.FirstOrDefault(t => t.Id.Equals(memo.Id));
+                        var memoModel = Summery.MemoList.FirstOrDefault(t => t.Id.Equals(memo.Id));
                         if (memoModel != null)
                         {
                             memoModel.Title = memo.Title;
@@ -150,7 +173,9 @@ namespace ToDo.ViewModels
                     var addResult = await memoService.AddAsync(memo);
                     if (addResult.Status)
                     {
-                        MemoDtos.Add(addResult.Result);
+                        Summery.MemoCount += 1;
+                        Summery.MemoList.Add(addResult.Result);
+                        this.Refresh();
                     }
                 }
             }
@@ -163,11 +188,44 @@ namespace ToDo.ViewModels
         {
             TaskBarList = new ObservableCollection<TaskBar>
             {
-                new TaskBar { Icon = "ClockFast", Title = "汇总", Content = "9", Color = "#FF0CA0FF", Target = "" },
-                new TaskBar { Icon = "ClockCheckOutline", Title = "已完成", Content = "27", Color = "#FF1ECA3A", Target = "" },
-                new TaskBar { Icon = "ChartLineVariant", Title = "完成比例", Content = "100%", Color = "#FF02C6DC", Target = "" },
-                new TaskBar { Icon = "PlaylistStar", Title = "备忘录", Content = "13", Color = "#FFFFA000", Target = "" }
+                new TaskBar { Icon = "ClockFast", Title = "汇总", Color = "#FF0CA0FF", Target = "ToDoView" },
+                new TaskBar { Icon = "ClockCheckOutline", Title = "已完成", Color = "#FF1ECA3A", Target = "ToDoView" },
+                new TaskBar { Icon = "ChartLineVariant", Title = "完成比例", Color = "#FF02C6DC", Target = "" },
+                new TaskBar { Icon = "PlaylistStar", Title = "备忘录", Color = "#FFFFA000", Target = "MemoView" }
             };
+        }
+        public void Refresh()
+        {
+            TaskBarList[0].Content = summery.Sum.ToString();
+            TaskBarList[1].Content = summery.CompletedCount.ToString();
+            TaskBarList[2].Content = summery.CompletedRatio;
+            TaskBarList[3].Content = summery.MemoCount.ToString();
+
+        }
+        public override async void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            try
+            {
+                UpdateLoading(true);
+                var SummaryResult = await toDoService.SummaryAsync();
+                if (SummaryResult.Status)
+                {
+                    Summery = SummaryResult.Result;
+                    Refresh();
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                UpdateLoading(false);
+            }
+
+
         }
 
         #region 属性
@@ -196,20 +254,12 @@ namespace ToDo.ViewModels
             set { taskBarList = value; RaisePropertyChanged(); }
         }
         /// <summary>
-        /// 待办集合
+        /// 汇总
         /// </summary>
-        public ObservableCollection<ToDoDto> ToDoDtos
+        public SummeryDto Summery
         {
-            get { return toDoDtos; }
-            set { toDoDtos = value; RaisePropertyChanged(); }
-        }
-        /// <summary>
-        /// 备忘集合
-        /// </summary>
-        public ObservableCollection<MemoDto> MemoDtos
-        {
-            get { return memoDtos; }
-            set { memoDtos = value; RaisePropertyChanged(); }
+            get { return summery; }
+            set { summery = value; RaisePropertyChanged(); }
         }
         #endregion
 

@@ -30,7 +30,7 @@ namespace ToDo.ViewModels.DialogViewModels
         private void Cancel()
         {
             if (DialogHost.IsDialogOpen(DialogHostName))
-                DialogHost.Close(DialogHostName);
+                DialogHost.Close(DialogHostName, new DialogResult(ButtonResult.No));
         }
 
         private void Save()

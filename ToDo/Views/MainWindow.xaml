@@ -124,7 +124,6 @@
                                     x:Name="CloseBtn"
                                     Width="40"
                                     Margin="5,0,0,0"
-                                    Command="{Binding CloseCommand}"
                                     Content="&#xe659;"
                                     FontSize="20"
                                     FontWeight="Bold"
