@@ -84,7 +84,16 @@
 
                 </materialDesign:DrawerHost.LeftDrawerContent>
                 <!--  导航条  -->
-                <DockPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <materialDesign:Snackbar
+                        x:Name="Snackbar"
+                        Panel.ZIndex="1"
+                        DockPanel.Dock="Top"
+                        MessageQueue="{materialDesign:MessageQueue}" />
                     <materialDesign:ColorZone
                         x:Name="ColorZone"
                         Padding="16"
@@ -164,8 +173,9 @@
                                 Text="记事本" />
                         </DockPanel>
                     </materialDesign:ColorZone>
-                    <ContentControl prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}" />
-                </DockPanel>
+                    <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}" />
+                </Grid>
+                <!--  一种小提示框  -->
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
     </Grid>

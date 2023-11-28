@@ -78,18 +78,32 @@ namespace ToDo.ViewModels
 
         private async void Complted(ToDoDto dto)
         {
-            var updateResult = await toDoService.UpdateAsync(dto);
-            if (updateResult.Status)
+            UpdateLoading(true);
+            try
             {
-                var todo = Summery.ToDoList.FirstOrDefault(t => t.Id.Equals(dto.Id));
-                if (todo != null)
+                UpdateLoading(true);
+                var updateResult = await toDoService.UpdateAsync(dto);
+                if (updateResult.Status)
                 {
-                    Summery.CompletedCount += 1;
-                    Summery.ToDoList.Remove(todo);
-                    Summery.CompletedRatio = (Summery.CompletedCount / (double)Summery.Sum).ToString("0%");
-                    this.Refresh();
+                    var todo = Summery.ToDoList.FirstOrDefault(t => t.Id.Equals(dto.Id));
+                    if (todo != null)
+                    {
+                        Summery.CompletedCount += 1;
+                        Summery.ToDoList.Remove(todo);
+                        Summery.CompletedRatio = (Summery.CompletedCount / (double)Summery.Sum).ToString("0%");
+                        this.Refresh();
+                    }
+                    aggregator.SendMessage("已完成！");
                 }
             }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                UpdateLoading(false);
+            }
+
         }
 
         private void Execute(string obj)
@@ -126,6 +140,7 @@ namespace ToDo.ViewModels
                             todoModel.Title = todo.Title;
                             todoModel.Content = todo.Content;
                         }
+                        aggregator.SendMessage("修改成功！");
                     }
                 }
                 else
@@ -138,6 +153,7 @@ namespace ToDo.ViewModels
                         Summery.CompletedRatio = (Summery.CompletedCount / (double)Summery.Sum).ToString("0%");
                         this.Refresh();
                     }
+                    aggregator.SendMessage("添加成功！");
                 }
 
             }
@@ -164,7 +180,7 @@ namespace ToDo.ViewModels
                         {
                             memoModel.Title = memo.Title;
                             memoModel.Content = memo.Content;
-
+                            aggregator.SendMessage("修改成功！");
                         }
                     }
                 }
@@ -177,6 +193,7 @@ namespace ToDo.ViewModels
                         Summery.MemoList.Add(addResult.Result);
                         this.Refresh();
                     }
+                    aggregator.SendMessage("添加成功！");
                 }
             }
         }
@@ -213,7 +230,6 @@ namespace ToDo.ViewModels
                     Summery = SummaryResult.Result;
                     Refresh();
                 }
-
             }
             catch (Exception)
             {

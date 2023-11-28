@@ -20,6 +20,12 @@ namespace ToDo.Views
         {
             InitializeComponent();
 
+            //注册提示消息
+            aggregator.Regitermessage(arg =>
+            {
+                Snackbar.MessageQueue.Enqueue(arg);
+            });
+
             //注册等待窗口
             aggregator.Resgiter(arg =>
             {

@@ -49,5 +49,23 @@ namespace ToDo.Extensions
         {
             aggregator.GetEvent<UpdateLoadEvent>().Subscribe(action);
         }
+        /// <summary>
+        /// 注册提示消息事件
+        /// </summary>
+        /// <param name="aggregator"></param>
+        /// <param name="action"></param>
+        public static void Regitermessage(this IEventAggregator aggregator, Action<string> action)
+        {
+            aggregator.GetEvent<MessageEvent>().Subscribe(action);
+        }
+        /// <summary>
+        /// 发送提示消息
+        /// </summary>
+        /// <param name="aggregator"></param>
+        /// <param name="message"></param>
+        public static void SendMessage(this IEventAggregator aggregator, string message)
+        {
+            aggregator.GetEvent<MessageEvent>().Publish(message);
+        }
     }
 }
