@@ -2,6 +2,7 @@
 using System.Reflection.Metadata;
 using ToDo.Api.Context.Models;
 using ToDo.Shared.Dtos;
+using System.Collections.ObjectModel;
 using ToDo.Shared.Parameters;
 
 namespace ToDo.Api.Service.ServiceImpl
@@ -139,6 +140,29 @@ namespace ToDo.Api.Service.ServiceImpl
             catch (Exception ex)
             {
                 return new ApiResponse(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 汇总方法
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ApiResponse> Summary()
+        {
+            try
+            {
+                //待办事项结果
+                var todos = await unitOfWork.GetRepository<ToDoE>().GetAllAsync(
+                    orderBy: source => source.OrderByDescending(t => t.CreateTime));
+                //备忘录结果
+                var memos = await unitOfWork.GetRepository<Memo>().GetAllAsync(
+                    orderBy: source => source.OrderByDescending(t => t.CreateTime));
+
+                SummeryDto summery = new SummeryDto();
+                summery.ToDoList = new ObservableCollection<ToDoDto>(mapper.Map<List<ToDoDto>>(todos.Where(t => t.Status == 0)));
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }
