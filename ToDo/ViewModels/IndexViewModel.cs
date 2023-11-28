@@ -12,11 +12,16 @@ using Prism.Commands;
 using ToDo.Views.DialogViews;
 using Prism.Services.Dialogs;
 using ToDo.Common;
+using Prism.Ioc;
+using ToDo.Services.ServiceImpl;
+using ToDo.Services;
 
 namespace ToDo.ViewModels
 {
-    public class IndexViewModel : BindableBase
+    public class IndexViewModel : NavigationViewMode
     {
+        private readonly IToDoService toDoService;
+        private readonly IMemoService memoService;
         private string welcomeTitle;
         private string userName = "杜炆洋";
         private ObservableCollection<TaskBar> taskBarList;
@@ -29,7 +34,7 @@ namespace ToDo.ViewModels
         /// <summary>
         /// 构造方法
         /// </summary>
-        public IndexViewModel(IDialogHostService service)
+        public IndexViewModel(IDialogHostService service, IContainerProvider provider) : base(provider)
         {
             InitTaskBar();
             ToDoDtos = new ObservableCollection<ToDoDto>();
@@ -39,6 +44,10 @@ namespace ToDo.ViewModels
 
             ExecuteCommand = new DelegateCommand<string>(Execute);
             this.service = service;
+
+            toDoService = provider.Resolve<IToDoService>();
+            memoService = provider.Resolve<MemoService>();
+
         }
 
 
@@ -55,14 +64,48 @@ namespace ToDo.ViewModels
             }
         }
 
-        private void AddToDo()
+        private async void AddToDo()
         {
-            service.ShowDialog("AddToDoView", null);
+            var dialogResult = await service.ShowDialog("AddToDoView", null);
+            if (dialogResult.Result == ButtonResult.OK)
+            {
+                var todo = dialogResult.Parameters.GetValue<ToDoDto>("Value");
+                if (todo.Id > 0)
+                {
+
+                }
+                else
+                {
+                    var addResult = await toDoService.AddAsync(todo);
+                    if (addResult.Status)
+                    {
+                        ToDoDtos.Add(addResult.Result);
+                    }
+                }
+
+            }
+
         }
 
-        private void AddMemo()
+        private async void AddMemo()
         {
-            service.ShowDialog("AddMemoView", null);
+            var dialogResult = await service.ShowDialog("AddMemoView", null);
+            if (dialogResult.Result == ButtonResult.OK)
+            {
+                var memo = dialogResult.Parameters.GetValue<MemoDto>("Value");
+                if (memo.Id > 0)
+                {
+
+                }
+                else
+                {
+                    var addResult = await memoService.AddAsync(memo);
+                    if (addResult.Status)
+                    {
+                        MemoDtos.Add(addResult.Result);
+                    }
+                }
+            }
         }
 
         /// <summary>

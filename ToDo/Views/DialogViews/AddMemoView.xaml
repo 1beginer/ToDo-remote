@@ -28,7 +28,8 @@
             <TextBox
                 Margin="20,0"
                 md:HintAssist.Hint="请输入备忘录概要"
-                DockPanel.Dock="Top" />
+                DockPanel.Dock="Top"
+                Text="{Binding Model.Title}" />
             <ScrollViewer Width="450" Height="110">
                 <TextBox
                     MinHeight="100"
@@ -36,6 +37,7 @@
                     md:HintAssist.Hint="请输入备忘录内容"
                     AcceptsReturn="True"
                     DockPanel.Dock="Top"
+                    Text="{Binding Model.Content}"
                     TextWrapping="Wrap" />
             </ScrollViewer>
         </DockPanel>

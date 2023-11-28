@@ -1,8 +1,10 @@
 ﻿using Prism.Events;
+using Prism.Services.Dialogs;
 using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using ToDo.Common;
 using ToDo.Extensions;
 
 namespace ToDo.Views
@@ -12,7 +14,9 @@ namespace ToDo.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(IEventAggregator aggregator)
+        private readonly IDialogHostService service;
+
+        public MainWindow(IEventAggregator aggregator, IDialogHostService service)
         {
             InitializeComponent();
 
@@ -41,10 +45,12 @@ namespace ToDo.Views
                 }
             };
 
-            //CloseBtn.Click += (s, e) =>
-            //{
-            //    this.Close();
-            //};
+            CloseBtn.Click += async (s, e) =>
+            {
+                var dialogResult = await service.Question("温馨提示", "是否退出系统");
+                if (dialogResult.Result != ButtonResult.OK) return;
+                this.Close();
+            };
             ColorZone.MouseMove += (s, e) =>
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
@@ -61,6 +67,7 @@ namespace ToDo.Views
             {
                 drawerHost.IsLeftDrawerOpen = false;
             };
+            this.service = service;
         }
     }
 }

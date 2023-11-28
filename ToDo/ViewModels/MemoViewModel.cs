@@ -15,6 +15,9 @@ using Prism.Regions;
 using System.CodeDom.Compiler;
 using System.Windows.Controls.Primitives;
 using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
+using ToDo.Common;
+using ToDo.Extensions;
 
 namespace ToDo.ViewModels
 {
@@ -22,6 +25,7 @@ namespace ToDo.ViewModels
     {
         private ObservableCollection<MemoDto> memoDtos;
         private bool isRightDrawerOpen;
+        private readonly IDialogHostService dialogHost;
         private readonly IMemoService memoService;
         private MemoDto currentMemo;
         private string search;
@@ -37,6 +41,7 @@ namespace ToDo.ViewModels
             DeleteCommand = new DelegateCommand<MemoDto>(Delete);
             this.memoService = memoService;
             MemoDtos = new ObservableCollection<MemoDto>();
+            dialogHost = provider.Resolve<IDialogHostService>();
 
         }
 
@@ -194,6 +199,8 @@ namespace ToDo.ViewModels
         {
             try
             {
+                var dialogResult = await dialogHost.Question("温馨提示", $"确认删除待办事项{dto.Title}?");
+                if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.OK) return;
                 UpdateLoading(true);
                 var deleteResult = await memoService.DeletedAsync(dto.Id);
                 if (deleteResult.Status)

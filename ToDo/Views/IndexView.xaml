@@ -115,7 +115,7 @@
                         Width="40"
                         Height="40"
                         VerticalAlignment="Top"
-                        Command="{Binding CloseCommand}"
+                        Command="{Binding ExecuteCommand}"
                         CommandParameter="AddToDo"
                         DockPanel.Dock="Right"
                         Style="{StaticResource MaterialDesignFloatingActionButton}">

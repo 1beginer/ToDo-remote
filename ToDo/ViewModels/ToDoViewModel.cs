@@ -14,12 +14,15 @@ using ToDo.Shared.Parameters;
 using Prism.Ioc;
 using Prism.Regions;
 using Microsoft.Win32;
+using ToDo.Common;
+using ToDo.Extensions;
 
 namespace ToDo.ViewModels
 {
     public class ToDoViewModel : NavigationViewMode
     {
         private readonly IToDoService toDoService;
+        private readonly IDialogHostService dialogHost;
 
         private ObservableCollection<ToDoDto> toDoDtos;
         private bool isRightDrawerOpen;
@@ -41,6 +44,8 @@ namespace ToDo.ViewModels
             //ComboBoxCommand = new DelegateCommand(Combo);
             this.toDoService = toDoService;
             ToDoDtos = new ObservableCollection<ToDoDto>();
+            //从容器中取出对应实例
+            dialogHost = provider.Resolve<IDialogHostService>();
 
         }
 
@@ -162,6 +167,8 @@ namespace ToDo.ViewModels
         {
             try
             {
+                var dialogResult = await dialogHost.Question("温馨提示", $"确认删除待办事项{dto.Title}?");
+                if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.OK) return;
                 UpdateLoading(true);
                 var deleteResult = await toDoService.DeletedAsync(dto.Id);
                 if (deleteResult.Status)

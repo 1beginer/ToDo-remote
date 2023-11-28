@@ -25,8 +25,6 @@ namespace ToDo.ViewModels
         public DelegateCommand<SideBar> NavigateCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand GoForwardCommand { get; private set; }
-        public DelegateCommand CloseCommand { get; private set; }
-
 
         public MainWindowViewModel(IRegionManager regionManager, IDialogHostService service)
         {
@@ -46,12 +44,6 @@ namespace ToDo.ViewModels
                     journal.GoForward();
             });
             regionManager.RegisterViewWithRegion(PrismManager.MainViewRegionName, typeof(IndexView));
-            CloseCommand = new DelegateCommand(Close);
-        }
-
-        private void Close()
-        {
-            service.ShowDialog("MsgView", null);
         }
 
         private void Navigate(SideBar obj)
