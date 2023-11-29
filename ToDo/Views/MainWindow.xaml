@@ -9,7 +9,6 @@
     Title="MainWindow"
     Width="1280"
     Height="768"
-    prism:ViewModelLocator.AutoWireViewModel="True"
     AllowsTransparency="True"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="微软雅黑"
@@ -59,7 +58,7 @@
                                 Margin="0,10,0,0"
                                 HorizontalAlignment="Center"
                                 FontSize="23"
-                                Text="杜炆洋" />
+                                Text="{Binding UserName}" />
                         </StackPanel>
                         <ListBox
                             x:Name="LeftMenu"
@@ -102,20 +101,28 @@
                         Mode="PrimaryMid">
 
                         <DockPanel>
+
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                <Image
-                                    Width="40"
-                                    Height="40"
-                                    Margin="0,0,10,0"
-                                    Source="../Resources/Images/user.jpg">
-                                    <!--  裁剪 -》椭圆裁剪 -》中线点20，20 x半径20，y半径20  -->
-                                    <Image.Clip>
-                                        <EllipseGeometry
-                                            Center="20,20"
-                                            RadiusX="20"
-                                            RadiusY="20" />
-                                    </Image.Clip>
-                                </Image>
+                                <materialDesign:PopupBox>
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <Image
+                                            Width="40"
+                                            Height="40"
+                                            Margin="0,0,10,0"
+                                            Source="../Resources/Images/user.jpg">
+                                            <!--  裁剪 -》椭圆裁剪 -》中线点20，20 x半径20，y半径20  -->
+                                            <Image.Clip>
+                                                <EllipseGeometry
+                                                    Center="20,20"
+                                                    RadiusX="20"
+                                                    RadiusY="20" />
+                                            </Image.Clip>
+                                        </Image>
+                                    </materialDesign:PopupBox.ToggleContent>
+                                    <StackPanel>
+                                        <Button Command="{Binding LoginOutCommand}" Content="注销当前账户" />
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
                                 <Button
                                     x:Name="MinBtn"
                                     Width="40"

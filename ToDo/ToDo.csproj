@@ -3,13 +3,18 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
-		<ApplicationIcon>Resources\Ico\ToDo.ico</ApplicationIcon>
+		<ApplicationIcon>Resources\Ico\favicon.ico</ApplicationIcon>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Resources\Fonts\iconfont.ttf" />
+		<None Remove="Resources\Ico\favicon.ico" />
 		<None Remove="Resources\Ico\ToDo.ico" />
+		<None Remove="Resources\Images\login.png" />
 		<None Remove="Resources\Images\user.jpg" />
 		<None Remove="Resources\Images\wind.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="Resources\Ico\favicon.ico" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci435" />
@@ -19,11 +24,13 @@
 		<PackageReference Include="RestSharp" Version="110.2.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\ToDo.Shared\ToDo.Shared.csproj" />
+		<ProjectReference Include="..\ToDo.Shared\ToDo.Shared.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Resource Include="Resources\Fonts\iconfont.ttf" />
+		<Resource Include="Resources\Ico\favicon.ico" />
 		<Resource Include="Resources\Ico\ToDo.ico" />
+		<Resource Include="Resources\Images\login.png" />
 		<Resource Include="Resources\Images\user.jpg" />
 		<Resource Include="Resources\Images\wind.png" />
 	</ItemGroup>

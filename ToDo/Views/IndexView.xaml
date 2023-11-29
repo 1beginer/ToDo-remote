@@ -24,7 +24,8 @@
             Grid.Row="0"
             Margin="15,10,0,15"
             FontSize="24"
-            Text="{Binding WelcomeTitle}" />
+            Foreground="Black"
+            Text="{Binding Title}" />
         <ItemsControl Grid.Row="1" ItemsSource="{Binding TaskBarList}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

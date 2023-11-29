@@ -7,17 +7,29 @@ using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
 using ToDo.Common;
+using DryIoc;
+using Prism.Ioc;
 
 namespace ToDo.ViewModels
 {
     public class MainWindowViewModel : BindableBase, IConfigurationService
     {
+        private string userName;
+
+        public string UserName
+        {
+            get { return userName; }
+            set { userName = value; RaisePropertyChanged(); }
+        }
+
         private ObservableCollection<SideBar> sideBars;
         public ObservableCollection<SideBar> SideBars
         {
             get { return sideBars; }
             set { sideBars = value; RaisePropertyChanged(); }
         }
+
+        private readonly IContainerProvider provider;
         private readonly IRegionManager regionManager;
         private readonly IDialogHostService service;
         private IRegionNavigationJournal journal;
@@ -25,11 +37,14 @@ namespace ToDo.ViewModels
         public DelegateCommand<SideBar> NavigateCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand GoForwardCommand { get; private set; }
+        public DelegateCommand LoginOutCommand { get; private set; }
 
-        public MainWindowViewModel(IRegionManager regionManager, IDialogHostService service)
+        public MainWindowViewModel(IContainerProvider provider, IRegionManager regionManager, IDialogHostService service)
         {
+            UserName = AppSession.Name;
             SideBars = new ObservableCollection<SideBar>();
             journal = new RegionNavigationJournal();
+            this.provider = provider;
             this.regionManager = regionManager;
             this.service = service;
             NavigateCommand = new DelegateCommand<SideBar>(Navigate);
@@ -42,6 +57,10 @@ namespace ToDo.ViewModels
             {
                 if (journal != null & journal.CanGoForward)
                     journal.GoForward();
+            });
+            LoginOutCommand = new DelegateCommand(() =>
+            {
+                App.LoginOut(provider);
             });
             regionManager.RegisterViewWithRegion(PrismManager.MainViewRegionName, typeof(IndexView));
         }
@@ -69,8 +88,11 @@ namespace ToDo.ViewModels
         /// </summary>
         public void Configuration()
         {
+            UserName = AppSession.Name;
             CreateSideBars();
             regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate("IndexView");
         }
+
+
     }
 }

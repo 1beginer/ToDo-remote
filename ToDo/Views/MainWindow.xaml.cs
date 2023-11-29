@@ -23,7 +23,7 @@ namespace ToDo.Views
             //注册提示消息
             aggregator.Regitermessage(arg =>
             {
-                Snackbar.MessageQueue.Enqueue(arg);
+                Snackbar.MessageQueue.Enqueue(arg.Message);
             });
 
             //注册等待窗口

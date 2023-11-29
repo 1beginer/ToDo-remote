@@ -16,9 +16,9 @@ namespace ToDo.Api.Controllers
             this.service = service;
         }
         [HttpPost]
-        public async Task<ApiResponse> Login(string Account, string Password) => await service.LoginAsync(Account, Password);
+        public async Task<ApiResponse> Login([FromBody] UserDto param) => await service.LoginAsync(param.Account, param.Password);
 
         [HttpPost]
-        public async Task<ApiResponse> Resgiter([FromQuery] UserDto user) => await service.ResgiterAsync(user);
+        public async Task<ApiResponse> Resgiter([FromBody] UserDto user) => await service.ResgiterAsync(user);
     }
 }

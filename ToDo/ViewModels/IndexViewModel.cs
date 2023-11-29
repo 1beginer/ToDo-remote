@@ -26,8 +26,7 @@ namespace ToDo.ViewModels
     {
         private readonly IToDoService toDoService;
         private readonly IMemoService memoService;
-        private string welcomeTitle;
-        private string userName = "杜炆洋";
+        private string userName;
         private SummeryDto summery;
         private ObservableCollection<TaskBar> taskBarList;
         private ObservableCollection<ToDoDto> toDoDtos;
@@ -41,6 +40,14 @@ namespace ToDo.ViewModels
         public DelegateCommand<ToDoDto> ToDoCompltedCommand { get; private set; }
         public DelegateCommand<TaskBar> NavigateCommand { get; private set; }
 
+        private string title;
+
+        public string Title
+        {
+            get { return title; }
+            set { title = value; RaisePropertyChanged(); }
+        }
+
 
         /// <summary>
         /// 构造方法
@@ -49,7 +56,8 @@ namespace ToDo.ViewModels
         {
             InitTaskBar();
             //string NowTime = DateTime.Now.ToString("yyy年MM月dd日dddd");
-            WelcomeTitle = "你好，" + UserName + DateTime.Now.GetDateTimeFormats('D')[1].ToString();
+            //DateTime.Now.GetDateTimeFormats('D')[1].ToString()
+            Title = $"你好，{AppSession.Name} {DateTime.Now.GetDateTimeFormats('D')[1].ToString()}";
 
             ExecuteCommand = new DelegateCommand<string>(Execute);
             EditToDoCommand = new DelegateCommand<ToDoDto>(AddToDo);
@@ -224,6 +232,7 @@ namespace ToDo.ViewModels
             try
             {
                 UpdateLoading(true);
+                UserName = AppSession.Name;
                 var SummaryResult = await toDoService.SummaryAsync();
                 if (SummaryResult.Status)
                 {
@@ -248,11 +257,7 @@ namespace ToDo.ViewModels
         /// <summary>
         /// 标题
         /// </summary>
-        public string WelcomeTitle
-        {
-            get { return welcomeTitle; }
-            set { welcomeTitle = value; RaisePropertyChanged(); }
-        }
+
         /// <summary>
         /// 用户名
         /// </summary>
@@ -278,7 +283,5 @@ namespace ToDo.ViewModels
             set { summery = value; RaisePropertyChanged(); }
         }
         #endregion
-
-
     }
 }

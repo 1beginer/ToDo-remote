@@ -9,6 +9,8 @@ namespace ToDo.Shared.Dtos
     public class UserDto : BaseDto
     {
         private string account;
+        private string? name;
+        private string password;
 
         public string Account
         {
@@ -16,15 +18,11 @@ namespace ToDo.Shared.Dtos
             set { account = value; OnPropertyChanged(); }
         }
 
-        private string name;
-
-        public string Name
+        public string? Name
         {
             get { return name; }
             set { name = value; OnPropertyChanged(); }
         }
-
-        private string password;
 
         public string Password
         {
